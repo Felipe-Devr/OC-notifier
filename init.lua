@@ -16,6 +16,7 @@ end
 
 -- DOWNLOAD
 for i=1, #scriptFiles do
+	print(scriptFiles[i])
 	downloadFile(scriptFiles[i])
 end
 
