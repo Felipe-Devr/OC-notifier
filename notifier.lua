@@ -4,7 +4,6 @@ local internet = require("internet");
 local component = require("component");
 local controller = component.me_controller;
 
-
 --- Program Configuration
 local configuration = {
 	weebhook =
@@ -22,12 +21,12 @@ local busyCpuCache = {};
 
 while true do
 	for cpuData in controller.getCpus() do
-		if cpuData.busy then
+		--[[ if cpuData.busy then
 			busyCpuCache[cpuData.name] = true;
 		end
 
 		if busyCpuCache[cpuData.name] and not cpuData.busy then  
 			notify("CPU " .. cpuData.name .. " finished")
-		end
+		end ]]
 	end
 end
