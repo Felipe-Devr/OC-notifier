@@ -75,7 +75,7 @@ function maintenance.Monitor()
     redstone.setWirelessFrequency(tonumber(signal) or -1);
 
     if redstone.getWirelessInput() then
-      Notify({
+      Notify("Maintenance", {
         content = string.format("**%s**\nNeeds Maintenance.", name),
         avatar_url =
         "https://ftbwiki.org/images/c/cc/Block_Maintenance_Hatch_%28GregTech_5%29.png",
