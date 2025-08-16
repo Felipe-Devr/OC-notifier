@@ -15,6 +15,7 @@ print("-- Starting notifier script --")
 require("ae2");
 
 Exit = false
+local maintenanceThread = nil;
 
 local function onKbEvent(name, address, char, code, playerName)
    if maintenance ~= nil and maintenance.reading then
@@ -49,13 +50,14 @@ while true do
    else
       maintenance = require("maintenance")
 
-      maintenance.Monitor();
+      maintenanceThread = maintenance.Start();
    end
    os.sleep(0.8)
 
 end
 
-if maintenance ~= nil then
+if maintenance ~= nil and maintenanceThread ~= nil then
    maintenance.OnStop();
+   maintenanceThread:kill();
 end
 event.ignore('key_up', onKbEvent);

@@ -2,6 +2,7 @@ local component = require("component");
 local fs = require("filesystem");
 local term = require("term");
 local os = require("os");
+local thread = require("thread");
 local redstone = component.redstone;
 require("utils");
 
@@ -47,6 +48,12 @@ local maintenance = {
 }
 
 
+function maintenance.Start()
+  return thread.create(function()
+    maintenance.Monitor();
+  end)
+end
+
 function maintenance.Monitor()
   if not maintenance.mode then
     -- Detection mode
@@ -79,6 +86,7 @@ function maintenance.Monitor()
         end
         maintenance.reading = false;
         maintenance.signals[tostring(i)] = name;
+        print(#maintenance.signals)
       end
       os.sleep(1.5);
       ::continue::
