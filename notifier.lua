@@ -31,14 +31,14 @@ repeat
 
 		for j = 1, #cpus do
 			local cpuData = cpus[j]
-			if cpuData.busy and busyCpuCache[cpuData.name] == nil then
-				table.insert(busyCpuCache, cpuData.name)
+			if cpuData.busy and busyCpuCache[j] == nil then
+				table.insert(busyCpuCache, j)
 			end
 
-			if busyCpuCache[cpuData.name] ~= nil and not cpuData.busy then
+			if busyCpuCache[j] ~= nil and not cpuData.busy then
 				print("We got one!")
-				notify("CPU " .. cpuData.name .. " finished")
-				table.remove(busyCpuCache, cpuData.name);
+				notify("CPU " .. j .. " finished")
+				table.remove(busyCpuCache, j);
 			end
 		end
 	end
