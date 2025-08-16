@@ -4,13 +4,9 @@ local internet = require("internet");
 local component = require("component");
 local event = require("event");
 local computer = require("computer")
+local configuration = require("config");
 
---- Program Configuration
-local configuration = {
-	webhook =
-	"Insert-Your-Webhook-Link"
-}
-
+-- Program functions
 
 local function notify(message)
 	internet.request(configuration.webhook, {
@@ -29,6 +25,7 @@ local function formatTime(hours, minutes, seconds)
 	end
 	return formatNumber(hours) .. ":" .. formatNumber(minutes) .. ":" .. formatNumber(seconds);
 end
+
 
 local controllers = {};
 local busyCpuCache = {};
