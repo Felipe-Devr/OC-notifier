@@ -17,7 +17,6 @@ require("ae2");
 local exit = false;
 
 local function onKbEvent(name, address, char, code, playerName)
-   print(maintenance)
    if maintenance ~= nil and maintenance.reading then
       return;
    end
@@ -35,11 +34,8 @@ print("-- Press e to stop the script --");
 
 while true do
    if exit then
-      if maintenance ~= nil then
-         maintenance.OnStop();
-      end
       print("Exiting notifier script");
-      return;
+      break;
    end
    MonitorAE();
    if not component.isAvailable("redstone") then
@@ -53,4 +49,7 @@ while true do
    os.sleep(0.8)
 end
 
+if maintenance ~= nil then
+   maintenance.OnStop();
+end
 event.ignore('key_up', onKbEvent);

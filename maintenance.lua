@@ -52,6 +52,15 @@ function maintenance.Monitor()
 	
 	if not maintenance.mode then
 		-- Detection mode
+		for i = 1, #maintenance.signals do
+			local signal = maintenance.signals[i];
+
+			redstone.setWirelessFrequency(signal);
+
+			if redstone.getWirelessInput() then
+				Notify(signal .. "Needs maintenance");
+			end
+		end
 	elseif maintenance.mode then
 		-- Discovery mode
 		for i = 1, 100 do
@@ -62,9 +71,9 @@ function maintenance.Monitor()
 
 			if redstone.getWirelessInput() then
 				print("Found a wireless signal with frequency " .. i);
-				print("Assign a singal name: ")
-				local name = term.read();
+				print("Assign a signal name: ")
 				maintenance.reading = true;
+				local name = term.read();
 
 				print(name)
 				if name == nil or name == "" then
