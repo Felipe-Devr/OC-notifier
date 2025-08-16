@@ -18,7 +18,7 @@ function ProcessQueue()
 
   lastMessageStamp = computer.uptime();
   table.remove(messageQueue, 1);
-  internet.request(config.webhook, message);
+  internet.request(config.webhook, message.content);
 end
 
 function FormatTime(hours, minutes, seconds)
