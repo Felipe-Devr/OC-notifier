@@ -8,7 +8,6 @@ local computer = require("computer")
 
 -- Program functions
 
-print(config.webhook)
 if config.webhook == "Place-Your-WebHook-URL-Here" then
    print("Default webhook URL is being used. Please set a valid webhook URL.");
    return;
