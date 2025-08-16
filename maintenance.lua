@@ -24,23 +24,22 @@ local function loadSignals()
 
     if wfp == nil then
       print("Unable to create signals file. Please check your filesystem.");
-      return {};
+      return;
     end
     wfp:write(" ");
     wfp:close();
-    return {};
+    return;
   end
   local rfp = fs.open(signalsFilePath, "r");
 
   if rfp == nil then
     print("Unable to open signals file. Please check your filesystem.");
-    return {};
+    return;
   end
   local contents = rfp:read(fs.size(signalsFilePath) - 1);
 
   rfp:close();
   local signals = Split(contents, ",");
-  local loaded = {};
 
   for i = 1, #signals, 2 do
     local signal = signals[i];
@@ -48,8 +47,8 @@ local function loadSignals()
 
     maintenance.addSignal(signal, name)
   end
-  return loaded;
 end
+
 
 
 function maintenance.addSignal(freq, name)
@@ -60,20 +59,12 @@ function maintenance.addSignal(freq, name)
   end
 end
 
-local maintenance = {
-  reading = false,
-  mode = true,
-  signals = loadSignals(),
-  signalFrequencies = {},
-  discoveryIdx = 1,
-  detectionIdx = 1,
-}
-
 
 
 function maintenance.Monitor()
   if maintenance.signals == nil then
-    maintenance.signals = loadSignals();
+    maintenance.signals = {}
+    loadSignals();
   end
   if not maintenance.mode then
     -- Detection mode

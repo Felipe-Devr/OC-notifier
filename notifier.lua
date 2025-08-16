@@ -61,7 +61,8 @@ while true do
    end
 
    os.sleep(1)
-   --if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
-   --   term.clear();
-   --end
+   
+   if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
+      term.clear();
+   end
 end
