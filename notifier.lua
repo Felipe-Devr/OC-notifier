@@ -1,21 +1,21 @@
 --- Libraries
 
 local internet = require("internet");
+local config = require("config");
 local component = require("component");
 local event = require("event");
 local computer = require("computer")
-local configuration = require("config");
 
 -- Program functions
 
-print(configuration.webhook)
-if configuration.webhook == "Place-Your-WebHook-URL-Here" then
+print(config.webhook)
+if config.webhook == "Place-Your-WebHook-URL-Here" then
    print("Default webhook URL is being used. Please set a valid webhook URL.");
    return;
 end
 
 local function notify(message)
-   internet.request(configuration.webhook, {
+   internet.request(config.webhook, {
       content = message,
       avatar_url = "https://static.wikia.nocookie.net/ftb_gamepedia/images/7/70/ME_Controller_AE2.png/revision/latest",
       username = "AE2 Crafting Notifier"

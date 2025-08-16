@@ -1,6 +1,6 @@
 local function loadConfiguration()
    return {
-      webhook = "Place-Your-WebHook-URL-Here"
+      webhook = 'Place-Your-WebHook-URL-Here'
    }
 end
 
