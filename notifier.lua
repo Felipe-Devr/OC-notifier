@@ -17,16 +17,26 @@ local function notify(message)
 	});
 end
 
+local controllers = {};
 local busyCpuCache = {};
 
+
+for address in component.list("me_controller") do
+	table.insert(controllers, component.proxy(component.get(address)));
+end
+
 while true do
-	for cpuData in controller.getCpus() do
-		--[[ if cpuData.busy then
+	for i = 1, #controllers do
+		local controller = controllers[i];
+		print(controller)
+		for cpuData in controller.getCpus() do
+			--[[ if cpuData.busy then
 			busyCpuCache[cpuData.name] = true;
 		end
 
-		if busyCpuCache[cpuData.name] and not cpuData.busy then  
+		if busyCpuCache[cpuData.name] and not cpuData.busy then
 			notify("CPU " .. cpuData.name .. " finished")
-		end ]]--
+		end ]] --
+		end
 	end
 end
