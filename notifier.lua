@@ -33,16 +33,18 @@ repeat
 		for j = 1, #cpus do
 			local cpuData = cpus[j]
 			if cpuData.busy and busyCpuCache[j] == nil then
+				print("START")
 				print(computer.uptime());
 				busyCpuCache["CPU " .. j] = {
 					startTime = computer.uptime(),
 					result = cpuData.cpu.finalOutput()
 				}
-				print(cpuData.cpu.finalOutput().size)
+				print(busyCpuCache["CPU " .. j].result.size)
 			end
 
 			if busyCpuCache["CPU " .. j] ~= nil and not cpuData.busy then
 				local procData = busyCpuCache["CPU " .. j]
+				print("END")
 
 				notify("CPU " .. j .. " finished crafting x" .. procData.result.size .. " " .. procData.result.label .. " after " .. (computer.uptime() - procData.startTime))
 
