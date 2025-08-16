@@ -1,6 +1,6 @@
 ## OC Notifier
 
-OC Notifier is a OpenComputers script that allow you to get notification of some events that may happen in your minecraft world.
+OC Notifier is an OpenComputers script that allow you to get notification of some technical events that may happen in your minecraft world.
 
 ![Example Notification](/public/notification.png)
 
