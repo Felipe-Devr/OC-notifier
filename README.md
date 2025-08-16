@@ -37,7 +37,7 @@ wget https://raw.githubusercontent.com/Felipe-Devr/OC-notifier/main/init.lua && 
 ![Example Setup](/public/example_setup.png)
 
 ## Running The Program
-Launch the notifier by typing `notifier`. The script runs indefinitely until manually terminated by the player pressing 'Ctrl-Alt + C' in the terminal. Restarting the computer also works.
+Launch the notifier by typing `notifier`. The script runs indefinitely until manually terminated by the player pressing `Ctrl-Alt + C` in the terminal. Restarting the computer also works.
 
 
 ## TODO list
