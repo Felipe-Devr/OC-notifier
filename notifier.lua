@@ -38,6 +38,10 @@ event.listen('key_up', onKbEvent)
 print("-- Press e to stop the script --");
 
 while true do
+   if exit then
+      break;
+   end
+   os.sleep(0.8)
    
    MonitorAE();
    if not component.isAvailable("redstone") then
@@ -47,11 +51,6 @@ while true do
 
       maintenance.Monitor();
    end
-
-   if exit then
-      break;
-   end
-   os.sleep(0.8)
 end
 
 if maintenance ~= nil then
