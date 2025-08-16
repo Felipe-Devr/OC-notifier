@@ -15,7 +15,7 @@ end
 function ProcessQueue()
   for type, messages in pairs(messageQueue) do
     if #messages == 0 then
-      return;
+      goto continue;
     end
     local message = messages[1];
 
@@ -24,6 +24,7 @@ function ProcessQueue()
       table.remove(messageQueue[type], 1);
       internet.request(config.webhook, message);
     end
+    ::continue::
   end
 end
 

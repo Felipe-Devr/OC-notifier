@@ -60,8 +60,8 @@ while true do
       maintenance.Monitor();
    end
 
-   os.sleep(1)
    ProcessQueue();
+   os.sleep(0.85)
 
    if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
       term.clear();
