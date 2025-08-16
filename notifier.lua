@@ -23,8 +23,13 @@ local function onKbEvent(name, address, char, code, playerName)
    if char == 101 then
       print("Stopping notifier script");
       exit = true
-   elseif char == 109 then
-      print("Disabling discovery mode")
+   elseif char == 109 and maintenance ~= nil then
+      maintenance.Toggle();
+      if maintenance.mode then
+         print("Maintenance module set to DISCOVERY mode");
+      else
+         print("Maintenance module set to DETECTION mode");
+      end
    end
 end
 
@@ -33,10 +38,7 @@ event.listen('key_up', onKbEvent)
 print("-- Press e to stop the script --");
 
 while true do
-   if exit then
-      print("Exiting notifier script");
-      break;
-   end
+   
    MonitorAE();
    if not component.isAvailable("redstone") then
       print("Unable to connect to the redstone component. Disabling maintenance module.")
@@ -46,6 +48,9 @@ while true do
       maintenance.Monitor();
    end
 
+   if exit then
+      break;
+   end
    os.sleep(0.8)
 end
 

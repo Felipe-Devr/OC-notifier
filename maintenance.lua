@@ -7,7 +7,6 @@ require("utils");
 
 
 local function loadSignals()
-	
 	if not fs.exists("signals.txt") then
 		local wfp = fs.open("signals.txt", "w");
 
@@ -35,7 +34,7 @@ local function loadSignals()
 	for i = 1, #signals, 2 do
 		local signal = signals[i];
 		local name = signals[i + 1];
-		
+
 		loaded[signal] = name;
 	end
 	return loaded;
@@ -43,13 +42,12 @@ end
 
 local maintenance = {
 	reading = false,
-	mode = true, 
+	mode = true,
 	signals = loadSignals()
 }
 
 
 function maintenance.Monitor()
-	
 	if not maintenance.mode then
 		-- Detection mode
 		for i = 1, #maintenance.signals do
@@ -61,7 +59,7 @@ function maintenance.Monitor()
 				Notify(signal .. "Needs maintenance");
 			end
 		end
-	elseif maintenance.mode then
+	else
 		-- Discovery mode
 		for i = 1, 100 do
 			if #maintenance.signals > 0 and Has(maintenance.signals, tostring(i)) then
@@ -75,7 +73,6 @@ function maintenance.Monitor()
 				maintenance.reading = true;
 				local name = term.read();
 
-				print(name)
 				if name == nil or name == "" then
 					print("Invalid name. Skipping signal.");
 					goto continue;
@@ -87,12 +84,11 @@ function maintenance.Monitor()
 			::continue::
 		end
 	end
-
 end
 
 function maintenance.OnStop()
 	local file, _ = fs.open("signals", "w");
-	
+
 	if file == nil then
 		print("Unable to open signals file. Please check your filesystem.");
 		return;
@@ -106,7 +102,7 @@ function maintenance.OnStop()
 	file:close();
 end
 
-function maintenance.toggle()
+function maintenance.Toggle()
 	maintenance.mode = not maintenance.mode;
 end
 
