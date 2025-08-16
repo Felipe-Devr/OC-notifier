@@ -7,14 +7,16 @@ local computer = require("computer")
 
 --- Program Configuration
 local configuration = {
-	weebhook =
+	webhook =
 	"https://discord.com/api/webhooks/1406120859193708544/Ww_ZBuBI9Fk4Ew6JqCT1HLZs-FuTdxQf8Rx8G2lI3fAne1BrBLgLJ5t4WWmCCr_-NbLb"
 }
 
 
 local function notify(message)
-	internet.request(configuration.weebhook, {
-		content = message
+	internet.request(configuration.webhook, {
+		content = message,
+		avatar_url = "https://static.wikia.nocookie.net/ftb_gamepedia/images/7/70/ME_Controller_AE2.png/revision/latest",
+		username = "AE2 Crafting Notifier"
 	});
 end
 
@@ -27,7 +29,7 @@ for address in component.list("me_controller") do
 end
 
 print("-- Starting notifier script --")
-print("-- Monitoring " .. #controllers .. "ME controllers --")
+print("-- Monitoring " .. #controllers .. " ME controllers --")
 print("-- Ctrl-Alt + C to stop the script --")
 
 repeat
@@ -52,7 +54,11 @@ repeat
 
 				local time = hours .. ":" .. minutes .. ":" .. (_seconds - (minutes * 60))
 				
-				notify("CPU " .. j .. " finished crafting x" .. procData.result.size .. " " .. procData.result.label .. " after " .. time);
+				if procData.result == nil then
+					notify("**CPU " .. j .. "**\nFinished crafting\n Elapsed: " .. time .. "\nUnable to get the crafting result.")
+				else
+					notify("**CPU " .. j .. "**\nFinished crafting\n Elapsed: " .. time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
+				end
 				busyCpuCache["CPU " .. j] = nil;
 			end
 		end
