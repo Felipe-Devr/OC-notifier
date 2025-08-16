@@ -10,7 +10,6 @@ local lastMessageStamp = computer.uptime();
 
 function Notify(type, message)
   table.insert(messageQueue[type], message);
-  ProcessQueue();
 end
 
 function ProcessQueue()
@@ -20,11 +19,11 @@ function ProcessQueue()
     end
     local message = messages[1];
 
-    if math.floor(computer.uptime() - lastMessageStamp) < config.messageTimeouts[type] then return; end
-
-    lastMessageStamp = computer.uptime();
-    table.remove(messageQueue, 1);
-    internet.request(config.webhook, message);
+    if math.floor(computer.uptime() - lastMessageStamp) >= config.messageTimeouts[type] then
+      lastMessageStamp = computer.uptime();
+      table.remove(messageQueue[type], 1);
+      internet.request(config.webhook, message);
+    end
   end
 end
 

@@ -61,7 +61,8 @@ while true do
    end
 
    os.sleep(1)
-   
+   ProcessQueue();
+
    if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
       term.clear();
    end
