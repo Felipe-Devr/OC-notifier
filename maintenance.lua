@@ -1,12 +1,16 @@
 local component = require("component");
 local fs = require("filesystem");
 local term = require("term");
+local shell = require("shell");
 local redstone = component.redstone;
 require("utils");
 
+local signalsFilePath = string.format("%s/signals.txt", shell.resolve("./"));
+
 local function loadSignals()
-  if not fs.exists("./signals.txt") then
-    local wfp = fs.open("./signals.txt", "w");
+  
+  if not fs.exists(signalsFilePath) then
+    local wfp = fs.open(signalsFilePath, "w");
 
     if wfp == nil then
       print("Unable to create signals file. Please check your filesystem.");
@@ -16,13 +20,13 @@ local function loadSignals()
     wfp:close();
     return {};
   end
-  local rfp = fs.open("./signals.txt", "r");
+  local rfp = fs.open(signalsFilePath, "r");
 
   if rfp == nil then
     print("Unable to open signals file. Please check your filesystem.");
     return {};
   end
-  local contents = rfp:read(fs.size("./signals.txt"));
+  local contents = rfp:read(fs.size(signalsFilePath));
   print(contents)
 
   rfp:close();
@@ -108,7 +112,7 @@ function maintenance.Monitor()
 end
 
 function maintenance.OnStop()
-  local file, _ = fs.open("./signals.txt", "w");
+  local file, _ = fs.open(signalsFilePath, "w");
 
   if file == nil then
     print("Unable to open signals file. Please check your filesystem.");
