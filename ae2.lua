@@ -11,15 +11,16 @@ for address in component.list("me_controller") do
   table.insert(controllers, component.proxy(component.get(address)));
 end
 
-print("-- Monitoring " .. #controllers .. " ME controllers --")
 
-if (#ignored > 0) then
-  print("-- Ignoring CPUs: " .. table.concat(ignored, ", ") .. " --");
-else
-  print("-- No CPUs are being ignored --");
-end
 
 function MonitorAE()
+  print("-- Monitoring " .. #controllers .. " ME controllers --")
+
+  if (#ignored > 0) then
+    print("-- Ignoring CPUs: " .. table.concat(ignored, ", ") .. " --");
+  else
+    print("-- No CPUs are being ignored --");
+  end
   for i = 1, #controllers do
     local cpus = controllers[i].getCpus()
 

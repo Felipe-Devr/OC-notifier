@@ -4,6 +4,7 @@ local config = require("config");
 local event = require("event");
 local os = require("os");
 local component = require("component");
+local term = require("term");
 local maintenance = nil;
 
 if config.webhook == "Place-Your-WebHook-URL-Here" then
@@ -36,24 +37,28 @@ end
 
 event.listen('key_up', onKbEvent)
 
-print("-- Press e to stop the script --");
 
 while true do
-   print(Exit)
    if Exit then
       break;
    end
-   
+
+   print("-- Press e to stop the script --");
+
    MonitorAE();
    if not component.isAvailable("redstone") then
       print("Unable to connect to the redstone component. Disabling maintenance module.")
    else
       maintenance = require("maintenance")
+      print("-- Press m to toggle maintenance mode --");
 
       maintenance.Monitor();
    end
+   
+   if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
+      term.clear();
+   end
    os.sleep(0.8)
-
 end
 
 if maintenance ~= nil and maintenanceThread ~= nil then

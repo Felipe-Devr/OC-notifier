@@ -45,7 +45,8 @@ local maintenance = {
   reading = false,
   mode = true,
   signals = loadSignals(),
-  discoveryIdx = 1
+  discoveryIdx = 1,
+  detectionIdx = 1,
 }
 
 
@@ -58,14 +59,18 @@ end
 function maintenance.Monitor()
   if not maintenance.mode then
     -- Detection mode
-    for i = 1, #maintenance.signals do
-      local signal = maintenance.signals[i];
+    local i = maintenance.detectionIdx;
+    local signal = maintenance.signals[i];
 
-      redstone.setWirelessFrequency(signal);
+    redstone.setWirelessFrequency(signal);
 
-      if redstone.getWirelessInput() then
-        Notify(signal .. "Needs maintenance");
-      end
+    if redstone.getWirelessInput() then
+      Notify(signal .. "Needs maintenance");
+    end
+    if maintenance.detectionIdx > #maintenance.signals then
+      maintenance.detectionIdx = 1;
+    else
+      maintenance.detectionIdx = maintenance.detectionIdx + 1;
     end
   else
     -- Discovery mode
@@ -87,10 +92,14 @@ function maintenance.Monitor()
       end
       maintenance.reading = false;
       maintenance.signals[tostring(i)] = name;
-      print(#maintenance.signals)
+      print("Saved " .. name .. " for frequency " .. i);
     end
     ::continue::
-    maintenance.discoveryIdx = maintenance.discoveryIdx + 1;
+    if (maintenance.discoveryIdx == 5000) then
+      maintenance.discoveryIdx = 1;
+    else
+      maintenance.discoveryIdx = maintenance.discoveryIdx + 1;
+    end
   end
 end
 
