@@ -1,7 +1,7 @@
 local function loadConfiguration()
    return {
       webhook = 'Place-Your-WebHook-URL-Here',
-      ignoreCpus = {
+      ignoredCpus = {
          1
       }
    }

@@ -31,7 +31,25 @@ local function formatTime(hours, minutes, seconds)
    return formatNumber(hours) .. ":" .. formatNumber(minutes) .. ":" .. formatNumber(seconds);
 end
 
-local function has(list, item) 
+
+local function getIgnored()
+   local ignored = {}
+
+   if #config.ignoredCpus >= 1 then
+      local endIndex = config.ignoredCpus[1];
+
+      if (#config.ignoredCpus > 1) then
+         endIndex = #config.ignoredCpus;
+      end
+      
+      for i = 1, endIndex do
+         table.insert(ignored, i);
+      end
+   end
+   return ignored
+end
+
+local function has(list, item)
    for _, value in ipairs(list) do
       if value == item then
          return true;
@@ -43,8 +61,7 @@ end
 
 local controllers = {};
 local busyCpuCache = {};
-local ignoredCpus = config.ignoreCpus;
-
+local ignored = getIgnored();
 
 for address in component.list("me_controller") do
    table.insert(controllers, component.proxy(component.get(address)));
@@ -52,23 +69,24 @@ end
 
 print("-- Starting notifier script --")
 print("-- Monitoring " .. #controllers .. " ME controllers --")
-print("-- Ctrl-Alt + C to stop the script --")
+
+if (#ignored > 0) then
+   print("-- Ignoring CPUs: " .. table.concat(ignored, ", ") .. " --");
+else
+   print("-- No CPUs are being ignored --");
+end
+
+print("-- Press Alt-Ctrl+C to stop the script --");
 
 repeat
    for i = 1, #controllers do
       local cpus = controllers[i].getCpus()
 
-      local startIdx = 1;
+      if (#ignored > #cpus) then return; end;
 
-      if #ignoredCpus == 1 then
-         startIdx = ignoredCpus[1];
-      end
+      for j = 1, #cpus do
+         if has(ignored, j) then goto continue; end
 
-      for j = startIdx, #cpus do
-         if #ignoredCpus > 1 and has(ignoredCpus, j) then
-            goto continue;
-         end
-         
          local cpuData = cpus[j]
          if cpuData.busy and busyCpuCache["CPU " .. j] == nil then
             busyCpuCache["CPU " .. j] = {
