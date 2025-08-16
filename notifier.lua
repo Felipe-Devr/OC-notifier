@@ -20,6 +20,16 @@ local function notify(message)
 	});
 end
 
+local function formatTime(hours, minutes, seconds) 
+	local timestring = "";
+
+	local function formatNumber(number) 
+		if (number < 10) then return "0" .. number; end;
+		return tostring(number);
+	end
+	return formatNumber(hours) .. ":" .. formatNumber(minutes) .. ":" .. formatNumber(seconds);
+end
+
 local controllers = {};
 local busyCpuCache = {};
 
@@ -52,12 +62,12 @@ repeat
 				local hours = math.floor(_minutes / 60);
 				local minutes = _minutes - (hours * 60);
 
-				local time = hours .. ":" .. minutes .. ":" .. (_seconds - (minutes * 60))
+				local time = formatTime(hours, minutes, _seconds - (minutes * 60));
 				
 				if procData.result == nil then
-					notify("**CPU " .. j .. "**\nFinished crafting\n Elapsed: " .. time .. "\nUnable to get the crafting result.")
+					notify("**CPU " .. j .. "**\nFinished crafting\nElapsed: " .. time .. "\nUnable to get the crafting result.");
 				else
-					notify("**CPU " .. j .. "**\nFinished crafting\n Elapsed: " .. time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
+					notify("**CPU " .. j .. "**\nFinished crafting\nElapsed: " .. time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
 				end
 				busyCpuCache["CPU " .. j] = nil;
 			end
