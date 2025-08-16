@@ -27,6 +27,6 @@ while true do
 
 		if busyCpuCache[cpuData.name] and not cpuData.busy then  
 			notify("CPU " .. cpuData.name .. " finished")
-		end ]]
+		end ]]--
 	end
 end
