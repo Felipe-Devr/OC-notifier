@@ -2,6 +2,7 @@
 
 local internet = require("internet");
 local component = require("component");
+local event = require("event");
 
 --- Program Configuration
 local configuration = {
@@ -24,20 +25,19 @@ for address in component.list("me_controller") do
 	table.insert(controllers, component.proxy(component.get(address)));
 end
 
-while true do
+repeat
 	for i = 1, #controllers do
 		local cpus = controllers[i].getCpus()
-		
-		print(cpus)
-	end
-end
 
---for cpuData in controllers[i].getCpus() do
-			--[[ if cpuData.busy then
-			busyCpuCache[cpuData.name] = true;
+		for j = 1, #cpus do
+			local cpuData = cpus[j]
+			if cpuData.busy then
+				busyCpuCache[cpuData.name] = true;
+			end
+
+			if busyCpuCache[cpuData.name] and not cpuData.busy then
+				notify("CPU " .. cpuData.name .. " finished")
+			end
 		end
-
-		if busyCpuCache[cpuData.name] and not cpuData.busy then
-			notify("CPU " .. cpuData.name .. " finished")
-		end ]] --
-		
+	end
+until event.pull(1) == "interruped"
