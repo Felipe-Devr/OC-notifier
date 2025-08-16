@@ -8,8 +8,17 @@ require("utils");
 
 local signalsFilePath = string.format("%s/signals.txt", shell.resolve("./"));
 
+
+local maintenance = {
+  reading = false,
+  mode = true,
+  signals = nil,
+  signalFrequencies = {},
+  discoveryIdx = 1,
+  detectionIdx = 1,
+}
+
 local function loadSignals()
-  
   if not fs.exists(signalsFilePath) then
     local wfp = fs.open(signalsFilePath, "w");
 
@@ -27,8 +36,7 @@ local function loadSignals()
     print("Unable to open signals file. Please check your filesystem.");
     return {};
   end
-  local contents = rfp:read(fs.size(signalsFilePath));
-  print(contents)
+  local contents = rfp:read(fs.size(signalsFilePath) - 1);
 
   rfp:close();
   local signals = Split(contents, ",");
@@ -38,9 +46,18 @@ local function loadSignals()
     local signal = signals[i];
     local name = signals[i + 1];
 
-    loaded[signal] = name;
+    maintenance.addSignal(signal, name)
   end
   return loaded;
+end
+
+
+function maintenance.addSignal(freq, name)
+  maintenance.signals[freq] = name;
+
+  for frequency, _ in pairs(maintenance.signals) do
+    table.insert(maintenance.signalFrequencies, frequency);
+  end
 end
 
 local maintenance = {
@@ -52,15 +69,12 @@ local maintenance = {
   detectionIdx = 1,
 }
 
-function maintenance.addSignal(freq, name)
-  maintenance.signals[freq] = name;
 
-  for frequency, _ in pairs(maintenance.signals) do
-    table.insert(maintenance.signalFrequencies, frequency);
-  end
-end
 
 function maintenance.Monitor()
+  if maintenance.signals == nil then
+    maintenance.signals = loadSignals();
+  end
   if not maintenance.mode then
     -- Detection mode
     local idx = maintenance.detectionIdx;
@@ -85,7 +99,7 @@ function maintenance.Monitor()
   else
     -- Discovery mode
     local idx = maintenance.discoveryIdx;
-    if #maintenance.signals > 0 and Has(maintenance.signals, tostring(idx)) then
+    if #maintenance.signalFrequencies > 0 and Has(maintenance.signals, tostring(idx)) then
       goto continue
     end
     redstone.setWirelessFrequency(idx);
@@ -98,6 +112,8 @@ function maintenance.Monitor()
 
       if name == nil or name == "" or type(name) == "boolean" then
         print("Invalid name. Skipping signal.");
+        maintenance.reading = false;
+
         goto continue;
       end
       maintenance.reading = false;
