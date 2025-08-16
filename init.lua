@@ -15,7 +15,7 @@ local function downloadFile(fileName)
 end
 
 -- DOWNLOAD
-for i=0, #scriptFiles do
+for i=1, #scriptFiles do
 	downloadFile(scriptFiles[i])
 end
 
