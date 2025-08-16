@@ -25,12 +25,12 @@ OC Notifier is an OpenComputers script that allow you to get notification of som
 3. Power everything by connecting a GregTech/AE2 cable directly to the computer case. Alternatively, use a power converter.
 4. Add all the components into the computer case and turn it on.
 5. Follow the instructions on the screen and type install -> Y -> Y
-6. Install the required scripts by using the following command.
+6. Install the required scripts by using the following command. 
 ```
 wget https://raw.githubusercontent.com/Felipe-Devr/OC-notifier/main/init.lua && init
 ```
 
-7. Edit the config file by entering `edit config.lua`, there you need to provide a webhook url
+7. Edit the config file by entering `edit config.lua`, there you need to provide a webhook url. Restart the computer after changing anything in the config.
 ![Where to copy the webhook URL](/public/webhook.png)
 > [How to create a Discord Webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
