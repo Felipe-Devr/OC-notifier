@@ -8,24 +8,25 @@ require("utils");
 
 local function loadSignals()
 	
-	if not fs.exists("signals") then
-		local wfp = fs.open("signals", "w");
+	if not fs.exists("signals.txt") then
+		local wfp = fs.open("signals.txt", "w");
 
 		if wfp == nil then
 			print("Unable to create signals file. Please check your filesystem.");
 			return {};
 		end
-		wfp:write("");
+		wfp:write(" ");
 		wfp:close();
 		return {};
 	end
-	local rfp = fs.open("signals", "r");
+	local rfp = fs.open("signals.txt", "r");
 
 	if rfp == nil then
 		print("Unable to open signals file. Please check your filesystem.");
 		return {};
 	end
-	local contents = rfp:read(fs.size("signals"));
+	local contents = rfp:read(fs.size("signals.txt"));
+	print(contents)
 
 	rfp:close();
 	local signals = Split(contents, ",");
@@ -54,7 +55,7 @@ function maintenance.Monitor()
 	elseif maintenance.mode then
 		-- Discovery mode
 		for i = 1, 100 do
-			if Has(maintenance.signals, tostring(i)) then
+			if #maintenance.signals > 0 and Has(maintenance.signals, tostring(i)) then
 				goto continue
 			end
 			redstone.setWirelessFrequency(i);
