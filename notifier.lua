@@ -26,6 +26,10 @@ for address in component.list("me_controller") do
 	table.insert(controllers, component.proxy(component.get(address)));
 end
 
+print("-- Starting notifier script --")
+print("-- Monitoring " .. #controllers .. "ME controllers --")
+print("-- Ctrl-Alt + C to stop the script --")
+
 repeat
 	for i = 1, #controllers do
 		local cpus = controllers[i].getCpus()
@@ -41,11 +45,16 @@ repeat
 
 			if busyCpuCache["CPU " .. j] ~= nil and not cpuData.busy then
 				local procData = busyCpuCache["CPU " .. j]
-				notify("CPU " .. j .. " finished crafting x" .. procData.result.size .. " " .. procData.result.label .. " after " .. (computer.uptime() - procData.startTime))
+				local _seconds = math.floor(computer.uptime() - procData.startTime);
+				local _minutes = math.floor(_seconds / 60);
+				local hours = math.floor(_minutes / 60);
+				local minutes = _minutes - (hours * 60);
 
+				local time = hours .. ":" .. minutes .. ":" .. (_seconds - (minutes * 60))
+				
+				notify("CPU " .. j .. " finished crafting x" .. procData.result.size .. " " .. procData.result.label .. " after " .. time);
 				busyCpuCache["CPU " .. j] = nil;
 			end
-			print(computer.uptime())
 		end
 	end
-until event.pull(1) == "interruped"
+until event.pull(0.5) == "interruped"
