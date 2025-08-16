@@ -121,6 +121,7 @@ function maintenance.OnStop()
   local string = "";
 
   for signal, name in pairs(maintenance.signals) do
+    print(signal, name)
     string = string .. signal .. "," .. name .. ",";
   end
   print(string);

@@ -40,7 +40,12 @@ event.listen('key_up', onKbEvent)
 
 while true do
    if Exit then
-      break;
+      if maintenance ~= nil then
+         maintenance.OnStop();
+      end
+      event.ignore('key_up', onKbEvent);
+
+      return
    end
 
    print("-- Press e to stop the script --");
@@ -60,8 +65,3 @@ while true do
    --   term.clear();
    --end
 end
-
-if maintenance ~= nil and maintenanceThread ~= nil then
-   maintenance.OnStop();
-end
-event.ignore('key_up', onKbEvent);
