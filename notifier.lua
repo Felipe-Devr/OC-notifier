@@ -2,7 +2,6 @@
 
 local internet = require("internet");
 local component = require("component");
-local controller = component.me_controller;
 
 --- Program Configuration
 local configuration = {
@@ -28,7 +27,7 @@ end
 while true do
 	for i = 1, #controllers do
 		local controller = controllers[i];
-		print(controller)
+		print(controller.getCpus)
 		for cpuData in controller.getCpus() do
 			--[[ if cpuData.busy then
 			busyCpuCache[cpuData.name] = true;
