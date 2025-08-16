@@ -2,7 +2,7 @@
 
 OC Notifier is a OpenComputers script that allow you to get notification of some events that may happen in your minecraft world.
 
-[Example Notification](/public/notification.png)
+![Example Notification](/public/notification.png)
 
 ## Bare Minimum Components
 - Tier 3 Computer Case
@@ -34,7 +34,7 @@ wget https://raw.githubusercontent.com/Felipe-Devr/OC-notifier/main/init.lua && 
 ![Where to copy the webhook URL](/public/webhook.png)
 > [How to create a Discord Webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
-[Example Setup](/public/example_setup.png)
+![Example Setup](/public/example_setup.png)
 
 ## Running The Program
 Launch the notifier by typing `notifier`. The script runs indefinitely until manually terminated by the player pressing 'Ctrl-Alt + C' in the terminal. Restarting the computer also works.
