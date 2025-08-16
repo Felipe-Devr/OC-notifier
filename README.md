@@ -6,7 +6,7 @@ OC Notifier is an OpenComputers script that allow you to get notification of som
 
 ## Bare Minimum Components
 - Tier 3 Computer Case
-- Tier 1 Screen
+- Tier 1 Screen 
 - Tier 1.5 Memory
 - Tier 1 Central Processing Unit
 - Tier 2 Graphics Card
