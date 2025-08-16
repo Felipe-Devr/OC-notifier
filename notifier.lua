@@ -9,6 +9,11 @@ local configuration = require("config");
 -- Program functions
 
 local function notify(message)
+	if configuration.webhook == "Place-Your-WebHook-URL-Here" then
+		print("Unable to send the message through the webhook. Invalid webhook URL");
+		return;
+	end
+
 	internet.request(configuration.webhook, {
 		content = message,
 		avatar_url = "https://static.wikia.nocookie.net/ftb_gamepedia/images/7/70/ME_Controller_AE2.png/revision/latest",
