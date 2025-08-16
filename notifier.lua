@@ -3,6 +3,7 @@
 local internet = require("internet");
 local component = require("component");
 local event = require("event");
+local computer = require("computer")
 
 --- Program Configuration
 local configuration = {
@@ -32,13 +33,18 @@ repeat
 		for j = 1, #cpus do
 			local cpuData = cpus[j]
 			if cpuData.busy and busyCpuCache[j] == nil then
-				table.insert(busyCpuCache, j)
+				busyCpuCache["CPU " .. j] = {
+					startTime = computer.uptime(),
+					result = cpuData.cpu.finalOutput()
+				}
 			end
 
-			if busyCpuCache[j] ~= nil and not cpuData.busy then
-				print("We got one!")
-				notify("CPU " .. j .. " finished")
-				table.remove(busyCpuCache, j);
+			if busyCpuCache["CPU " .. j] ~= nil and not cpuData.busy then
+				local procData = busyCpuCache["CPU " .. j]
+
+				notify("CPU " .. j .. " finished crafting x" .. procData.result.size .. " " .. procData.result.label .. " after " .. (computer.uptime() - procData.startTime))
+
+				busyCpuCache["CPU " .. j] = nil;
 			end
 		end
 	end
