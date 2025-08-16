@@ -8,7 +8,7 @@ local computer = require("computer")
 --- Program Configuration
 local configuration = {
 	webhook =
-	"https://discord.com/api/webhooks/1406120859193708544/Ww_ZBuBI9Fk4Ew6JqCT1HLZs-FuTdxQf8Rx8G2lI3fAne1BrBLgLJ5t4WWmCCr_-NbLb"
+	"Insert-Your-Webhook-Link"
 }
 
 
@@ -20,10 +20,10 @@ local function notify(message)
 	});
 end
 
-local function formatTime(hours, minutes, seconds) 
+local function formatTime(hours, minutes, seconds)
 	local timestring = "";
 
-	local function formatNumber(number) 
+	local function formatNumber(number)
 		if (number < 10) then return "0" .. number; end;
 		return tostring(number);
 	end
@@ -63,11 +63,15 @@ repeat
 				local minutes = _minutes - (hours * 60);
 
 				local time = formatTime(hours, minutes, _seconds - (minutes * 60));
-				
+
 				if procData.result == nil then
-					notify("**CPU " .. j .. "**\nFinished crafting\nElapsed: " .. time .. "\nUnable to get the crafting result.");
+					notify("**CPU " ..
+					j .. "**\nFinished crafting\nElapsed: " .. time .. "\nUnable to get the crafting result.");
 				else
-					notify("**CPU " .. j .. "**\nFinished crafting\nElapsed: " .. time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
+					notify("**CPU " ..
+					j ..
+					"**\nFinished crafting\nElapsed: " ..
+					time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
 				end
 				busyCpuCache["CPU " .. j] = nil;
 			end
