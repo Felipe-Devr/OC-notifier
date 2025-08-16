@@ -33,10 +33,12 @@ repeat
 		for j = 1, #cpus do
 			local cpuData = cpus[j]
 			if cpuData.busy and busyCpuCache[j] == nil then
+				print(computer.uptime());
 				busyCpuCache["CPU " .. j] = {
 					startTime = computer.uptime(),
 					result = cpuData.cpu.finalOutput()
 				}
+				print(cpuData.cpu.finalOutput().size)
 			end
 
 			if busyCpuCache["CPU " .. j] ~= nil and not cpuData.busy then
@@ -46,6 +48,7 @@ repeat
 
 				busyCpuCache["CPU " .. j] = nil;
 			end
+			print(computer.uptime())
 		end
 	end
 until event.pull(1) == "interruped"
