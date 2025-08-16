@@ -24,7 +24,7 @@ function ProcessQueue()
 
     lastMessageStamp = computer.uptime();
     table.remove(messageQueue, 1);
-    internet.request(config.webhook, message.content);
+    internet.request(config.webhook, message);
   end
 end
 
