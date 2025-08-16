@@ -50,7 +50,7 @@ while true do
    else
       maintenance = require("maintenance")
 
-      maintenanceThread = maintenance.Start();
+      maintenance.Monitor();
    end
    os.sleep(0.8)
 
@@ -58,6 +58,5 @@ end
 
 if maintenance ~= nil and maintenanceThread ~= nil then
    maintenance.OnStop();
-   maintenanceThread:kill();
 end
 event.ignore('key_up', onKbEvent);

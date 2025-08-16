@@ -44,7 +44,8 @@ end
 local maintenance = {
   reading = false,
   mode = true,
-  signals = loadSignals()
+  signals = loadSignals(),
+  discoveryIdx = 1
 }
 
 
@@ -68,29 +69,28 @@ function maintenance.Monitor()
     end
   else
     -- Discovery mode
-    for i = 1, 100 do
-      if #maintenance.signals > 0 and Has(maintenance.signals, tostring(i)) then
-        goto continue
-      end
-      redstone.setWirelessFrequency(i);
-
-      if redstone.getWirelessInput() then
-        print("Found a wireless signal with frequency " .. i);
-        print("Assign a signal name: ")
-        maintenance.reading = true;
-        local name = term.read();
-
-        if name == nil or name == "" then
-          print("Invalid name. Skipping signal.");
-          goto continue;
-        end
-        maintenance.reading = false;
-        maintenance.signals[tostring(i)] = name;
-        print(#maintenance.signals)
-      end
-      os.sleep(1.5);
-      ::continue::
+    local i = maintenance.discoveryIdx;
+    if #maintenance.signals > 0 and Has(maintenance.signals, tostring(i)) then
+      goto continue
     end
+    redstone.setWirelessFrequency(i);
+
+    if redstone.getWirelessInput() then
+      print("Found a wireless signal with frequency " .. i);
+      print("Assign a signal name: ")
+      maintenance.reading = true;
+      local name = term.read();
+
+      if name == nil or name == "" then
+        print("Invalid name. Skipping signal.");
+        goto continue;
+      end
+      maintenance.reading = false;
+      maintenance.signals[tostring(i)] = name;
+      print(#maintenance.signals)
+    end
+    ::continue::
+    maintenance.discoveryIdx = maintenance.discoveryIdx + 1;
   end
 end
 
