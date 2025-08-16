@@ -8,20 +8,20 @@ require("utils");
 
 local function loadSignals()
 	
-	local file, _ = fs.open("signals", "w+");
+	local file, _ = fs.open("signals", "rbracket");
 	
 	if file == nil then
 		print("Unable to open signals file. Please check your filesystem.");
 		return;
 	end
 	if not fs.exists("signals") then
-		file.write(file, "");
-		file.close(file);
+		file:write("");
+		file:close();
 		return {};
 	end
-	local contents = file.read(file, fs.size("signals"));
+	local contents = file:read(fs.size("signals"));
 
-	file.close(file);
+	file:close();
 	local signals = Split(contents, ",");
 	local loaded = {};
 
@@ -74,7 +74,7 @@ function maintenance.Monitor()
 end
 
 function maintenance.OnStop()
-	local file, _ = fs.open("signals", "w+");
+	local file, _ = fs.open("signals", "w");
 	
 	if file == nil then
 		print("Unable to open signals file. Please check your filesystem.");
@@ -85,8 +85,8 @@ function maintenance.OnStop()
 	for signal, name in pairs(maintenance.signals) do
 		string = string .. signal .. "," .. name .. ",";
 	end
-	file.write(file, string);
-	file.close(file);
+	file:write(string);
+	file:close();
 end
 
 function maintenance.toggle()
