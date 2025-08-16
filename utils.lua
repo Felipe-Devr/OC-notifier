@@ -5,17 +5,19 @@ local computer = require("computer");
 local messageQueue = {};
 local lastMessageStamp = computer.uptime();
 
-function Notify(message)
-  table.insert(messageQueue, message);
+function Notify(type, message)
+  table.insert(messageQueue, { type = type, content = message });
   ProcessQueue();
 end
 
 function ProcessQueue()
   if #messageQueue == 0 then return; end
-  if math.floor(computer.uptime() - lastMessageStamp) < 6 then return; end
+  local message = messageQueue[1];
+
+  if math.floor(computer.uptime() - lastMessageStamp) < config.messageTimeouts[message.type] then return; end
 
   lastMessageStamp = computer.uptime();
-  local message = table.remove(messageQueue, 1);
+  table.remove(messageQueue, 1);
   internet.request(config.webhook, message);
 end
 

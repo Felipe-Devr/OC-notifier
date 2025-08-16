@@ -90,7 +90,7 @@ function maintenance.Monitor()
   else
     -- Discovery mode
     local idx = maintenance.discoveryIdx;
-    if #maintenance.signalFrequencies > 0 and Has(maintenance.signals, tostring(idx)) then
+    if #maintenance.signalFrequencies > 0 and Has(maintenance.signalFrequencies, tostring(idx)) then
       goto continue
     end
     redstone.setWirelessFrequency(idx);

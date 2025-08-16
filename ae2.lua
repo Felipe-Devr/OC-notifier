@@ -47,14 +47,14 @@ function MonitorAE()
         local time = FormatTime(hours, minutes, seconds);
 
         if procData.result == nil then
-          Notify({
+          Notify("AE2", {
             content = string.format("**CPU %d**\nFinished crafting\nElapsed: %s\nUnable to get the result item.", j, time),
             avatar_url =
             "https://static.wikia.nocookie.net/ftb_gamepedia/images/7/70/ME_Controller_AE2.png/revision/latest",
             username = "AE2 Crafting Notifier"
           });
         else
-          Notify({
+          Notify("AE2", {
             content = string.format("**CPU %d**\nFinished crafting\nElapsed: %s\nResult: x%d %s", j, time,
               procData.result.size, procData.result.label),
             avatar_url =
