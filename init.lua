@@ -8,14 +8,14 @@ local scriptFiles = {
 
 local endPoint = "https://raw.githubusercontent.com/Felipe-Devr/OC-notifier/main/"
 
-local function downloadFile(fileName) 
+local function downloadFile(fileName)
 	local url = string.format("%s%s", endPoint, fileName);
 
 	shell.execute(string.format("wget -f %s", url));
 end
 
 -- DOWNLOAD
-for i=1, #scriptFiles do
+for i = 1, #scriptFiles do
 	downloadFile(scriptFiles[i])
 end
 

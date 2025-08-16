@@ -68,12 +68,12 @@ repeat
 
 				if procData.result == nil then
 					notify("**CPU " ..
-					j .. "**\nFinished crafting\nElapsed: " .. time .. "\nUnable to get the crafting result.");
+						j .. "**\nFinished crafting\nElapsed: " .. time .. "\nUnable to get the crafting result.");
 				else
 					notify("**CPU " ..
-					j ..
-					"**\nFinished crafting\nElapsed: " ..
-					time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
+						j ..
+						"**\nFinished crafting\nElapsed: " ..
+						time .. "\nResult: x" .. procData.result.size .. " " .. procData.result.label);
 				end
 				busyCpuCache["CPU " .. j] = nil;
 			end
