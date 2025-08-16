@@ -11,22 +11,22 @@ for address in component.list("me_controller") do
 	table.insert(controllers, component.proxy(component.get(address)));
 end
 
+print("-- Monitoring " .. #controllers .. " ME controllers --")
+
+if (#ignored > 0) then
+	print("-- Ignoring CPUs: " .. table.concat(ignored, ", ") .. " --");
+else
+	print("-- No CPUs are being ignored --");
+end
+
 function MonitorAE()
-	print("-- Monitoring " .. #controllers .. " ME controllers --")
-
-	if (#ignored > 0) then
-		print("-- Ignoring CPUs: " .. table.concat(ignored, ", ") .. " --");
-	else
-		print("-- No CPUs are being ignored --");
-	end
-
 	for i = 1, #controllers do
 		local cpus = controllers[i].getCpus()
 
 		if (#ignored > #cpus) then return; end;
 
 		for j = 1, #cpus do
-			if utils.has(ignored, j) then goto continue; end
+			if Has(ignored, j) then goto continue; end
 
 			local cpuData = cpus[j]
 			if cpuData.busy and busyCpuCache["CPU " .. j] == nil then

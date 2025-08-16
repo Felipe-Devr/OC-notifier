@@ -2,6 +2,9 @@ local shell = require("shell");
 local files = {
    'notifier.lua',
    'config.lua',
+   'ae2.lua',
+   'notifier.lua',
+   'utils.lua',
    'uninstall.lua'
 }
 
