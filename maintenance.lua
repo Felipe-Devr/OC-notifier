@@ -1,8 +1,6 @@
 local component = require("component");
 local fs = require("filesystem");
 local term = require("term");
-local os = require("os");
-local thread = require("thread");
 local redstone = component.redstone;
 require("utils");
 
@@ -50,22 +48,17 @@ local maintenance = {
 }
 
 
-function maintenance.Start()
-  return thread.create(function()
-    maintenance.Monitor();
-  end)
-end
 
 function maintenance.Monitor()
   if not maintenance.mode then
     -- Detection mode
-    local i = maintenance.detectionIdx;
-    local signal = maintenance.signals[i];
+    local idx = maintenance.detectionIdx;
+    local signal = maintenance.signals[idx];
 
-    redstone.setWirelessFrequency(signal);
+    redstone.setWirelessFrequency(idx);
 
     if redstone.getWirelessInput() then
-      Notify(signal .. "Needs maintenance");
+      Notify(string.format("%s needs maintenance", signal ));
     end
     if maintenance.detectionIdx > #maintenance.signals then
       maintenance.detectionIdx = 1;
@@ -74,14 +67,14 @@ function maintenance.Monitor()
     end
   else
     -- Discovery mode
-    local i = maintenance.discoveryIdx;
-    if #maintenance.signals > 0 and Has(maintenance.signals, tostring(i)) then
+    local idx = maintenance.discoveryIdx;
+    if #maintenance.signals > 0 and Has(maintenance.signals, tostring(idx)) then
       goto continue
     end
-    redstone.setWirelessFrequency(i);
+    redstone.setWirelessFrequency(idx);
 
     if redstone.getWirelessInput() then
-      print("Found a wireless signal with frequency " .. i);
+      print("Found a wireless signal with frequency " .. idx);
       print("Assign a signal name: ")
       maintenance.reading = true;
       local name = term.read();
@@ -91,8 +84,9 @@ function maintenance.Monitor()
         goto continue;
       end
       maintenance.reading = false;
-      maintenance.signals[tostring(i)] = name;
-      print("Saved " .. name .. " for frequency " .. i);
+      print(tostring(idx), #maintenance.signals)
+      maintenance.signals[tostring(idx)] = name;
+      print(#maintenance.signals)
     end
     ::continue::
     if (maintenance.discoveryIdx == 5000) then
