@@ -4,7 +4,6 @@ local term = require("term");
 local redstone = component.redstone;
 require("utils");
 
-
 local function loadSignals()
   if not fs.exists("signals.txt") then
     local wfp = fs.open("signals.txt", "w");
@@ -43,24 +42,33 @@ local maintenance = {
   reading = false,
   mode = true,
   signals = loadSignals(),
+  signalFrequencies = {},
   discoveryIdx = 1,
   detectionIdx = 1,
 }
 
+function maintenance.addSignal(freq, name) 
+  maintenance.signals[freq] = name;
+
+  for frequency, name in pairs(maintenance.signals) do
+    table.insert(maintenance.signalFrequencies, frequency);
+  end
+end
 
 
 function maintenance.Monitor()
   if not maintenance.mode then
     -- Detection mode
     local idx = maintenance.detectionIdx;
-    local signal = maintenance.signals[tostring(idx)];
+    local signal = maintenance.signalFrequencies[idx];
+    local name = maintenance.signals[signal];
 
-    redstone.setWirelessFrequency(idx);
+    redstone.setWirelessFrequency(signal);
 
     if redstone.getWirelessInput() then
-      Notify(string.format("%s needs maintenance", signal ));
+      Notify(string.format("%s needs maintenance", name ));
     end
-    if maintenance.detectionIdx > #maintenance.signals then
+    if maintenance.detectionIdx > #maintenance.signalFrequencies then
       maintenance.detectionIdx = 1;
     else
       maintenance.detectionIdx = maintenance.detectionIdx + 1;
@@ -75,7 +83,7 @@ function maintenance.Monitor()
 
     if redstone.getWirelessInput() then
       print("Found a wireless signal with frequency " .. idx);
-      print("Assign a signal name: ")
+      print("Assign a signal name (Dont use commas): ")
       maintenance.reading = true;
       local name = term.read();
 
@@ -84,7 +92,7 @@ function maintenance.Monitor()
         goto continue;
       end
       maintenance.reading = false;
-      maintenance.signals[tostring(idx)] = name;
+      maintenance.addSignal(tostring(idx), name);
       
     end
     ::continue::
