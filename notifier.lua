@@ -26,8 +26,13 @@ end
 
 while true do
 	for i = 1, #controllers do
-		print(controllers[i].getCpus())
-		for cpuData in controllers[i].getCpus() do
+		local cpus = controllers[i].getCpus()
+		
+		print(cpus)
+	end
+end
+
+--for cpuData in controllers[i].getCpus() do
 			--[[ if cpuData.busy then
 			busyCpuCache[cpuData.name] = true;
 		end
@@ -35,6 +40,4 @@ while true do
 		if busyCpuCache[cpuData.name] and not cpuData.busy then
 			notify("CPU " .. cpuData.name .. " finished")
 		end ]] --
-		end
-	end
-end
+		
