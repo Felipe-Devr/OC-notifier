@@ -53,7 +53,7 @@ function maintenance.Monitor()
   if not maintenance.mode then
     -- Detection mode
     local idx = maintenance.detectionIdx;
-    local signal = maintenance.signals[idx];
+    local signal = maintenance.signals[tostring(idx)];
 
     redstone.setWirelessFrequency(idx);
 
@@ -84,9 +84,8 @@ function maintenance.Monitor()
         goto continue;
       end
       maintenance.reading = false;
-      print(tostring(idx), #maintenance.signals)
       maintenance.signals[tostring(idx)] = name;
-      print(#maintenance.signals)
+      
     end
     ::continue::
     if (maintenance.discoveryIdx == 5000) then

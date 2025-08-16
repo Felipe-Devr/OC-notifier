@@ -54,11 +54,11 @@ while true do
 
       maintenance.Monitor();
    end
-   
+
+   os.sleep(1)
    if (maintenance ~= nil and not maintenance.reading) or maintenance == nil then
       term.clear();
    end
-   os.sleep(0.8)
 end
 
 if maintenance ~= nil and maintenanceThread ~= nil then
