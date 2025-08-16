@@ -31,9 +31,19 @@ local function formatTime(hours, minutes, seconds)
    return formatNumber(hours) .. ":" .. formatNumber(minutes) .. ":" .. formatNumber(seconds);
 end
 
+local function has(list, item) 
+   for _, value in ipairs(list) do
+      if value == item then
+         return true;
+      end
+   end
+   return false
+end
+
 
 local controllers = {};
 local busyCpuCache = {};
+local ignoredCpus = config.ignoreCpus;
 
 
 for address in component.list("me_controller") do
@@ -48,7 +58,17 @@ repeat
    for i = 1, #controllers do
       local cpus = controllers[i].getCpus()
 
-      for j = 1, #cpus do
+      local startIdx = 1;
+
+      if #ignoredCpus == 1 then
+         startIdx = ignoredCpus[1];
+      end
+
+      for j = startIdx, #cpus do
+         if #ignoredCpus > 1 and has(ignoredCpus, j) then
+            goto continue;
+         end
+         
          local cpuData = cpus[j]
          if cpuData.busy and busyCpuCache["CPU " .. j] == nil then
             busyCpuCache["CPU " .. j] = {
@@ -77,6 +97,7 @@ repeat
             end
             busyCpuCache["CPU " .. j] = nil;
          end
+         ::continue::
       end
    end
 until event.pull(0.5) == "interruped"
