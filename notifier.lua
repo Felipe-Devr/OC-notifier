@@ -17,6 +17,7 @@ require("ae2");
 local exit = false;
 
 local function onKbEvent(name, address, char, code, playerName)
+   print(maintenance)
    if maintenance ~= nil and maintenance.reading then
       return;
    end
@@ -38,7 +39,7 @@ while true do
          maintenance.OnStop();
       end
       print("Exiting notifier script");
-      break;
+      return;
    end
    MonitorAE();
    if not component.isAvailable("redstone") then

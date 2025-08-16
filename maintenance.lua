@@ -66,6 +66,7 @@ function maintenance.Monitor()
 				local name = term.read();
 				maintenance.reading = true;
 
+				print(name)
 				if name == nil or name == "" then
 					print("Invalid name. Skipping signal.");
 					goto continue;
