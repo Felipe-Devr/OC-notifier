@@ -8,20 +8,26 @@ require("utils");
 
 local function loadSignals()
 	
-	local file, _ = fs.open("signals", "rbracket");
-	
-	if file == nil then
-		print("Unable to open signals file. Please check your filesystem.");
-		return;
-	end
 	if not fs.exists("signals") then
-		file:write("");
-		file:close();
+		local wfp = fs.open("signals", "w");
+
+		if wfp == nil then
+			print("Unable to create signals file. Please check your filesystem.");
+			return {};
+		end
+		wfp:write("");
+		wfp:close();
 		return {};
 	end
-	local contents = file:read(fs.size("signals"));
+	local rfp = fs.open("signals", "r");
 
-	file:close();
+	if rfp == nil then
+		print("Unable to open signals file. Please check your filesystem.");
+		return {};
+	end
+	local contents = rfp:read(fs.size("signals"));
+
+	rfp:close();
 	local signals = Split(contents, ",");
 	local loaded = {};
 
