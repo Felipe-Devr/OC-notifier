@@ -3,6 +3,9 @@ local shell = require("shell");
 local scriptFiles = {
    'config.lua',
    'notifier.lua',
+   'ae2.lua',
+   'utils.lua',
+   'maintenance.lua',
    'uninstall.lua'
 }
 
@@ -15,8 +18,13 @@ local function downloadFile(fileName)
 end
 
 -- DOWNLOAD
+shell.execute("mkdir notifier && cd notifier");
 for i = 1, #scriptFiles do
    downloadFile(scriptFiles[i])
 end
 
+
+shell.execute("cd ..");
+print("Notifier downloaded successfully, now configure it and run it with 'notifier/notifier.lua'");
 shell.execute("rm init.lua");
+
