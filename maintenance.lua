@@ -1,16 +1,96 @@
 local component = require("component");
-local utils = require("utils");
-local maintenance = {}
-local receiver = component.redstone;
+local fs = require("filesystem");
+local term = require("term");
+local os = require("os");
+local redstone = component.redstone;
+require("utils");
 
 
-function maintenance.Monitor() 
-	print(receiver)
-	print(receiver.getWirelessFrequency());
+local function loadSignals()
+	
+	local file, _ = fs.open("signals", "w+");
+	
+	if file == nil then
+		print("Unable to open signals file. Please check your filesystem.");
+		return;
+	end
+	if not fs.exists("signals") then
+		file.write(file, "");
+		file.close(file);
+		return {};
+	end
+	local contents = file.read(file, fs.size("signals"));
+
+	file.close(file);
+	local signals = Split(contents, ",");
+	local loaded = {};
+
+	for i = 1, #signals, 2 do
+		local signal = signals[i];
+		local name = signals[i + 1];
+		
+		loaded[signal] = name;
+	end
+	return loaded;
 end
 
-function maintenance.SetMode(mode)
-	maintenance.mode = mode;
+local maintenance = {
+	reading = false,
+	mode = true, 
+	signals = loadSignals()
+}
+
+
+function maintenance.Monitor()
+	
+	if not maintenance.mode then
+		-- Detection mode
+	elseif maintenance.mode then
+		-- Discovery mode
+		for i = 1, 100 do
+			if Has(maintenance.signals, tostring(i)) then
+				goto continue
+			end
+			redstone.setWirelessFrequency(i);
+
+			if redstone.getWirelessInput() then
+				print("Found a wireless signal with frequency " .. i);
+				print("Assign a singal name: ")
+				local name = term.read();
+				maintenance.reading = true;
+
+				if name == nil or name == "" then
+					print("Invalid name. Skipping signal.");
+					goto continue;
+				end
+				maintenance.reading = false;
+				maintenance.signals[tostring(i)] = name;
+			end
+			os.sleep(1.5);
+			::continue::
+		end
+	end
+
+end
+
+function maintenance.OnStop()
+	local file, _ = fs.open("signals", "w+");
+	
+	if file == nil then
+		print("Unable to open signals file. Please check your filesystem.");
+		return;
+	end
+	local string = "";
+
+	for signal, name in pairs(maintenance.signals) do
+		string = string .. signal .. "," .. name .. ",";
+	end
+	file.write(file, string);
+	file.close(file);
+end
+
+function maintenance.toggle()
+	maintenance.mode = not maintenance.mode;
 end
 
 return maintenance;

@@ -10,13 +10,22 @@ function Notify(message)
 end
 
 function FormatTime(hours, minutes, seconds)
-   local timestring = "";
-
    local function formatNumber(number)
       if (number < 10) then return "0" .. number; end;
       return tostring(number);
    end
    return formatNumber(hours) .. ":" .. formatNumber(minutes) .. ":" .. formatNumber(seconds);
+end
+
+function Split(str, sep)
+  if sep == nil then
+    sep = "%s"
+  end
+  local t = {}
+  for str in string.gmatch(str, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  return t
 end
 
 
