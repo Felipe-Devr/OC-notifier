@@ -15,6 +15,7 @@ local exit = false;
 
 local function onKbEvent(name, address, char, code, playerName) 
 
+   print(char)
    if char == 101 then
       exit = true
    elseif char == 109 then
@@ -27,8 +28,8 @@ end
 
 event.listen('key_up', onKbEvent)
 
-repeat
+while not exit do
    MonitorAE();
-until exit
+end
 
 event.ignore('key_up', onKbEvent);

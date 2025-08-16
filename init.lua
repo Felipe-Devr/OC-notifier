@@ -25,6 +25,6 @@ end
 
 
 shell.execute("cd ..");
-print("Notifier downloaded successfully, now configure it and run it with 'notifier/notifier.lua'");
+print("Notifier downloaded successfully, now configure it and run it with 'cd notifier && notifier'");
 shell.execute("rm init.lua");
 

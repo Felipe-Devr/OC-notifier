@@ -3,7 +3,7 @@ local files = {
    'notifier.lua',
    'config.lua',
    'ae2.lua',
-   'notifier.lua',
+   'maintenance.lua',
    'utils.lua',
    'uninstall.lua'
 }
