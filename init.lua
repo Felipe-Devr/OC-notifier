@@ -14,7 +14,7 @@ local endPoint = "https://raw.githubusercontent.com/Felipe-Devr/OC-notifier/main
 local function downloadFile(fileName)
    local url = string.format("%s%s", endPoint, fileName);
 
-   shell.execute(string.format("wget -f %s", url));
+   shell.execute(string.format("wget -f %s notifier/%s", url, fileName));
 end
 
 -- DOWNLOAD

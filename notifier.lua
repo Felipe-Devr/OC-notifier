@@ -10,11 +10,18 @@ if config.webhook == "Place-Your-WebHook-URL-Here" then
 end
 
 print("-- Starting notifier script --")
-print("-- Press Alt-Ctrl+C to stop the script --");
+print("-- Press e to stop the script --");
+local exit = false;
 
 local function onKbEvent(name, address, char, code, playerName) 
 
-   print(char, code);
+   if char == 101 then
+      exit = true
+   elseif char == 109 then
+      print("Disabling discovery mode")
+   elseif char == 100 then
+      print("Enabling discovery mode")
+   end
 
 end
 
@@ -22,6 +29,6 @@ event.listen('key_up', onKbEvent)
 
 repeat
    MonitorAE();
-until event.pull(0.5) == "interruped"
+until exit
 
 event.ignore('key_up', onKbEvent);
