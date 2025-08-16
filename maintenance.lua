@@ -1,6 +1,7 @@
 local component = require("component");
 local fs = require("filesystem");
 local term = require("term");
+local text = require("text");
 local shell = require("shell");
 local redstone = component.redstone;
 require("utils");
@@ -54,7 +55,7 @@ local maintenance = {
 function maintenance.addSignal(freq, name)
   maintenance.signals[freq] = name;
 
-  for frequency, name in pairs(maintenance.signals) do
+  for frequency, _ in pairs(maintenance.signals) do
     table.insert(maintenance.signalFrequencies, frequency);
   end
 end
@@ -95,12 +96,12 @@ function maintenance.Monitor()
       maintenance.reading = true;
       local name = term.read();
 
-      if name == nil or name == "" then
+      if name == nil or name == "" or type(name) == "boolean" then
         print("Invalid name. Skipping signal.");
         goto continue;
       end
       maintenance.reading = false;
-      maintenance.addSignal(tostring(idx), name);
+      maintenance.addSignal(tostring(idx), text.trim(name));
     end
     ::continue::
     if (maintenance.discoveryIdx == 5000) then
@@ -118,14 +119,12 @@ function maintenance.OnStop()
     print("Unable to open signals file. Please check your filesystem.");
     return;
   end
-  local string = "";
+  local saved = "";
 
   for signal, name in pairs(maintenance.signals) do
-    print(signal, name)
-    string = string .. signal .. "," .. name .. ",";
+    saved = string.format("%s%s,%s,", saved, signal, name);
   end
-  print(string);
-  file:write(string);
+  file:write(saved);
   file:close();
 end
 
