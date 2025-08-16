@@ -26,9 +26,8 @@ end
 
 while true do
 	for i = 1, #controllers do
-		local controller = controllers[i];
-		print(controller.getCpus)
-		for cpuData in controller.getCpus() do
+		print(controllers[i].getCpus())
+		for cpuData in controllers[i].getCpus() do
 			--[[ if cpuData.busy then
 			busyCpuCache[cpuData.name] = true;
 		end
