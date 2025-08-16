@@ -2,23 +2,30 @@ local internet = require("internet");
 local config = require("config");
 local computer = require("computer");
 
-local messageQueue = {};
+local messageQueue = {
+  AE2 = {},
+  Maintenance = {}
+};
 local lastMessageStamp = computer.uptime();
 
 function Notify(type, message)
-  table.insert(messageQueue, { type = type, content = message });
+  table.insert(messageQueue[type], message);
   ProcessQueue();
 end
 
 function ProcessQueue()
-  if #messageQueue == 0 then return; end
-  local message = messageQueue[1];
+  for type, messages in pairs(messageQueue) do
+    if #messages == 0 then
+      return;
+    end
+    local message = messages[1];
 
-  if math.floor(computer.uptime() - lastMessageStamp) < config.messageTimeouts[message.type] then return; end
+    if math.floor(computer.uptime() - lastMessageStamp) < config.messageTimeouts[type] then return; end
 
-  lastMessageStamp = computer.uptime();
-  table.remove(messageQueue, 1);
-  internet.request(config.webhook, message.content);
+    lastMessageStamp = computer.uptime();
+    table.remove(messageQueue, 1);
+    internet.request(config.webhook, message.content);
+  end
 end
 
 function FormatTime(hours, minutes, seconds)
