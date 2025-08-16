@@ -5,8 +5,8 @@ local redstone = component.redstone;
 require("utils");
 
 local function loadSignals()
-  if not fs.exists("signals.txt") then
-    local wfp = fs.open("signals.txt", "w");
+  if not fs.exists("./signals.txt") then
+    local wfp = fs.open("./signals.txt", "w");
 
     if wfp == nil then
       print("Unable to create signals file. Please check your filesystem.");
@@ -16,13 +16,13 @@ local function loadSignals()
     wfp:close();
     return {};
   end
-  local rfp = fs.open("signals.txt", "r");
+  local rfp = fs.open("./signals.txt", "r");
 
   if rfp == nil then
     print("Unable to open signals file. Please check your filesystem.");
     return {};
   end
-  local contents = rfp:read(fs.size("signals.txt"));
+  local contents = rfp:read(fs.size("./signals.txt"));
   print(contents)
 
   rfp:close();
@@ -47,14 +47,13 @@ local maintenance = {
   detectionIdx = 1,
 }
 
-function maintenance.addSignal(freq, name) 
+function maintenance.addSignal(freq, name)
   maintenance.signals[freq] = name;
 
   for frequency, name in pairs(maintenance.signals) do
     table.insert(maintenance.signalFrequencies, frequency);
   end
 end
-
 
 function maintenance.Monitor()
   if not maintenance.mode then
@@ -63,10 +62,15 @@ function maintenance.Monitor()
     local signal = maintenance.signalFrequencies[idx];
     local name = maintenance.signals[signal];
 
-    redstone.setWirelessFrequency(signal);
+    redstone.setWirelessFrequency(tonumber(signal) or -1);
 
     if redstone.getWirelessInput() then
-      Notify(string.format("%s needs maintenance", name ));
+      Notify({
+        content = string.format("**%s**\nNeeds Maintenance.", name),
+        avatar_url =
+        "https://ftbwiki.org/images/c/cc/Block_Maintenance_Hatch_%28GregTech_5%29.png",
+        username = "Maintenance Notifier"
+      });
     end
     if maintenance.detectionIdx > #maintenance.signalFrequencies then
       maintenance.detectionIdx = 1;
@@ -93,7 +97,6 @@ function maintenance.Monitor()
       end
       maintenance.reading = false;
       maintenance.addSignal(tostring(idx), name);
-      
     end
     ::continue::
     if (maintenance.discoveryIdx == 5000) then
@@ -105,7 +108,7 @@ function maintenance.Monitor()
 end
 
 function maintenance.OnStop()
-  local file, _ = fs.open("signals", "w");
+  local file, _ = fs.open("./signals.txt", "w");
 
   if file == nil then
     print("Unable to open signals file. Please check your filesystem.");
@@ -116,6 +119,7 @@ function maintenance.OnStop()
   for signal, name in pairs(maintenance.signals) do
     string = string .. signal .. "," .. name .. ",";
   end
+  print(string);
   file:write(string);
   file:close();
 end

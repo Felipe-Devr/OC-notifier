@@ -1,12 +1,22 @@
 local internet = require("internet");
 local config = require("config");
+local computer = require("computer");
+
+local messageQueue = {};
+local lastMessageStamp = computer.uptime();
 
 function Notify(message)
-  internet.request(config.webhook, {
-    content = message,
-    avatar_url = "https://static.wikia.nocookie.net/ftb_gamepedia/images/7/70/ME_Controller_AE2.png/revision/latest",
-    username = "AE2 Crafting Notifier"
-  });
+  table.insert(messageQueue, message);
+  ProcessQueue();
+end
+
+function ProcessQueue()
+  if #messageQueue == 0 then return; end
+  if math.floor(computer.uptime() - lastMessageStamp) < 6 then return; end
+
+  lastMessageStamp = computer.uptime();
+  local message = table.remove(messageQueue, 1);
+  internet.request(config.webhook, message);
 end
 
 function FormatTime(hours, minutes, seconds)
